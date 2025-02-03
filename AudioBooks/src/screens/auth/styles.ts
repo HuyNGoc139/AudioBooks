@@ -64,11 +64,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 'auto',
   },
-
-  arrowBack: {
-    position: 'absolute',
-    left: 5,
-    zIndex: 9999,
+  sendForgotSuccessText: {
+    textAlign: 'center',
+    color: Colors.neroGrey,
+    marginTop: 25,
   },
 });
 

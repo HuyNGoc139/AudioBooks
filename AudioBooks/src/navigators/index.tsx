@@ -24,12 +24,10 @@ const RootNavigator = () => {
         screenOptions={{
           headerShown: false,
         }}>
-        {!isAuth ? (
+        {isAuth ? (
           <RootStack.Screen name="Auth" component={AuthNavigator} />
         ) : (
-          <>
-            <RootStack.Screen name="App" component={AppNavigator} />
-          </>
+          <RootStack.Screen name="App" component={AppNavigator} />
         )}
       </RootStack.Navigator>
     </NavigationContainer>

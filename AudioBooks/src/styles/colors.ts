@@ -38,4 +38,5 @@ export const Colors = {
   black333: '#333333',
   black666: '#666666',
   blackB3: '#B3B3B3',
+  neroGrey: '#262626',
 };

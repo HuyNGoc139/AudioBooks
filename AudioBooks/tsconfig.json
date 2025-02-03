@@ -3,6 +3,7 @@
     "jsx": "react-jsx", // Hoặc "react" nếu bạn sử dụng React < 17
     "target": "es6", // Hoặc phiên bản ES phù hợp
     "module": "es2015", // Tùy vào môi trường dự án
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     "strict": true,
     "baseUrl": ".",
     "paths": {

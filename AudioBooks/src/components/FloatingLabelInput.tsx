@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    fontSize: 14,
+    fontSize: 16,
   },
 
   labelContainer: {

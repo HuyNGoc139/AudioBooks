@@ -1,14 +1,16 @@
-import { Fonts } from '../styles/fonts';
-import React, { memo } from 'react';
-import { StyleProp, Text, TextProps, TextStyle } from 'react-native';
+import {Fonts} from '@src/styles/fonts';
+import React, {memo} from 'react';
+import {StyleProp, Text, TextProps, TextStyle} from 'react-native';
 
 export type TAppTextStyle = StyleProp<Omit<TextStyle, 'fontFamily'>>;
 
 type Props = {
   children: string | string[] | React.ReactNode;
   style?: TAppTextStyle;
-  fontFamily?: 'thin' | 'regular' | 'medium' | 'semibold' | 'bold';
+  fontFamily?: TFontFamily;
 } & Omit<TextProps, 'style'>;
+
+export type TFontFamily = 'thin' | 'regular' | 'medium' | 'semibold' | 'bold';
 
 interface IFonts {
   [key: string]: Pick<TextStyle, 'fontFamily' | 'fontWeight'>;
@@ -38,7 +40,7 @@ const FONTS: IFonts = {
 };
 
 export const AppText = memo((props: Props) => {
-  const { fontFamily = 'regular', children, style, ...textProps } = props;
+  const {fontFamily = 'regular', children, style, ...textProps} = props;
 
   return (
     <Text style={[FONTS[fontFamily], style]} {...textProps}>
