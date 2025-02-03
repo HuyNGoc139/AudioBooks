@@ -30,4 +30,12 @@ export const Colors = {
   black38: '#00000061',
   black30: '#0000004D',
   black45: '#00000073',
+  primary2: '#47544D',
+  secondary2: '#F9F7EB',
+  acentorange: '#FA805D',
+  acentbluegray: '#778C81',
+  acentgray: '#EAEBE8',
+  black333: '#333333',
+  black666: '#666666',
+  blackB3: '#B3B3B3',
 };
