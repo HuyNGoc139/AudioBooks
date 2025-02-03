@@ -1,81 +1,37 @@
 import {
   Alert,
-  ImageBackground,
-  SafeAreaView,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useCallback, useMemo, useState} from 'react';
-import {Lock, Sms} from 'iconsax-react-native';
-import {Image} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {
-  validateEmail,
-  validatePassword,
-  validatePasswordLogin,
-} from './validate';
-import {useDispatch} from 'react-redux';
-import {AppDispatch} from '@src/hooks/store';
-import {sendResetPasswordEmail} from '@src/utils/ultils';
 import HeaderComponent from '@src/components/HeaderComponent';
-import {Colors, Fonts} from '@src/styles';
-import {useForm, Controller} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import {FloatingLabelInput} from '@src/components/FloatingLabelInput';
-import {AppButton} from '@src/components/AppButton';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Images} from '@src/assets';
-import {useNavigation} from '@react-navigation/native';
+import {FloatingLabelInput} from '@src/components/FloatingLabelInput';
 import SpaceComponent from '@src/components/SpaceComponent';
-import {TAuthStackParamList} from '@src/types/routes/auth.route';
+import {useNavigation} from '@react-navigation/native';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {useForm} from 'react-hook-form';
+import * as yup from 'yup';
+import {useMemo} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {TAuthStackParamList} from '@src/types/routes/auth.route';
+import {Colors} from '@src/styles';
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<TAuthStackParamList>>();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errText, setErrorText] = useState<string>('');
-  const [isVisible, setIsVisible] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-  const errorMessage = useMemo(() => errText, [errText]);
-  const [user, setUser] = useState<any>();
-  const handleLogin = useCallback(async () => {
-    if (!email || !password) {
-      setErrorText('Please enter your email and password!!!');
-    } else if (!validateEmail(email)) {
-      setErrorText('Please enter the correct email format');
-    } else if (!validatePasswordLogin(password)) {
-      setErrorText('Password must be at least 6 characters');
-    } else {
-      setErrorText('');
-      try {
-      } catch (error) {
-        if (error instanceof Error) {
-          setErrorText(error.message || 'Login failed. Please try again.');
-        } else {
-          setErrorText('An unknown error occurred. Please try again.');
-        }
-      }
-    }
-  }, [email, password, navigation]);
 
-  const handleResetPassword = async () => {
-    try {
-      await sendResetPasswordEmail(email);
-      Alert.alert('Thành công', 'Email đặt lại mật khẩu đã được gửi!');
-    } catch (error: any) {
-      Alert.alert('Lỗi', error.message);
-    }
-  };
-
-  const LoginSchema = useMemo(
+  const RegisterSchema = useMemo(
     () =>
       yup.object().shape({
         accountname: yup.string().required('Vui lòng không để trống'),
+        email: yup
+          .string()
+          .required('Vui lòng không để trống ô email')
+          .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Email chưa đúng định dạng'),
         password: yup
           .string()
           .required('Vui lòng không để trống các ô mật khẩu')
@@ -83,6 +39,10 @@ const LoginScreen = () => {
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%*?&!.-_> </^~`])[A-Za-z\d@#$%*?&!.-_> </^~`]{6,15}$/,
             'Vui lòng nhập đúng định dạng',
           ),
+        confirmPassword: yup
+          .string()
+          .required('Vui lòng không để trống các ô mật khẩu')
+          .oneOf([yup.ref('password')], 'Mật khẩu xác nhận không chính xác'),
       }),
     [],
   );
@@ -96,8 +56,10 @@ const LoginScreen = () => {
     defaultValues: {
       accountname: '',
       password: '',
+      email: '',
+      confirmPassword: '',
     },
-    resolver: yupResolver(LoginSchema),
+    resolver: yupResolver(RegisterSchema),
     mode: 'all',
   });
   const checkOne =
@@ -108,28 +70,29 @@ const LoginScreen = () => {
       watch('password'),
     );
 
-  const onSubmit = (data: {accountname: string; password: string}) => {
+  const onSubmit = (data: {
+    accountname: string;
+    password: string;
+    email: string;
+    confirmPassword: string;
+  }) => {
     if (checkOne && checkTwo) {
       console.log('Tài khoản:', data.accountname);
       console.log('Mật khẩu:', data.password);
+      console.log('Mật khẩu:', data.email);
+      console.log('Mật khẩu:', data.confirmPassword);
       Alert.alert(
         'Thông tin đăng nhập',
         `Tài khoản: ${data.accountname}\nMật khẩu: ${data.password}`,
       );
     }
   };
-
-  const navToFogotPassWord = () => {
-    navigation.navigate('ForgotPassword');
-  };
-
   return (
-    <View style={styles.safeAreaView}>
+    <View style={styles.container}>
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
-        style={styles.container}
         contentContainerStyle={{flexGrow: 1}}>
-        <HeaderComponent title="Đăng Nhập" />
+        <HeaderComponent title="Đăng Ký" />
         <Image
           style={{
             width: 300,
@@ -148,6 +111,15 @@ const LoginScreen = () => {
         />
 
         <FloatingLabelInput
+          label={'Email'}
+          isRequired
+          wrapperStyle={{marginTop: 10}}
+          value={watch('email')}
+          onChangeText={text => setValue('email', text)}
+          errorMessages={errors?.email?.message}
+        />
+
+        <FloatingLabelInput
           label={'Mật Khẩu'}
           isRequired
           isSecure
@@ -156,15 +128,22 @@ const LoginScreen = () => {
           onChangeText={text => setValue('password', text)}
           errorMessages={errors?.password?.message}
         />
-        <View>
-          <TouchableOpacity onPress={navToFogotPassWord}>
-            <Text style={styles.textforgot}>Quên Mật Khẩu?</Text>
-          </TouchableOpacity>
-        </View>
+
+        <FloatingLabelInput
+          label={'Nhập Lại Mật Khẩu'}
+          isRequired
+          wrapperStyle={{marginTop: 10}}
+          isSecure
+          value={watch('confirmPassword')}
+          onChangeText={text => setValue('confirmPassword', text)}
+          errorMessages={errors?.confirmPassword?.message}
+        />
+
+        <View></View>
         <TouchableOpacity
           style={styles.button}
           onPress={handleSubmit(onSubmit)}>
-          <Text style={styles.buttonText}>Đăng Nhập</Text>
+          <Text style={styles.buttonText}>Đăng Ký</Text>
         </TouchableOpacity>
         <SpaceComponent height={80} />
         <View style={{flexDirection: 'row'}}>
@@ -173,14 +152,14 @@ const LoginScreen = () => {
         <SpaceComponent height={40} />
         <View style={styles.textContainer}>
           <Text style={styles.textforgot}>
-            Bạn chưa có tài khoản?
+            Bạn đã có tài khoản?
             <Text
               style={{color: Colors.acentorange}}
               onPress={() => {
-                navigation.navigate('RegisterScreen');
+                navigation.navigate('Login');
               }}>
               {' '}
-              Đăng Ký
+              Đăng Nhập
             </Text>
           </Text>
         </View>
@@ -188,7 +167,6 @@ const LoginScreen = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
@@ -235,5 +213,4 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-export default LoginScreen;
+export default RegisterScreen;

@@ -4,8 +4,10 @@ import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from './LoginScreen';
 import ForgotPasswordScreen from './ForgotPasswordScreen';
+import RegisterScreen from './RegisterScreen';
+import {TAuthStackParamList} from '@src/types/routes/auth.route';
 
-const AuthStack = createNativeStackNavigator();
+const AuthStack = createNativeStackNavigator<TAuthStackParamList>();
 const AuthNavigator = () => {
   //   useEffect(() => {
   //     BootSplash.hide({ fade: true });
@@ -20,6 +22,7 @@ const AuthNavigator = () => {
         name="ForgotPassword"
         component={ForgotPasswordScreen}
       />
+      <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} />
     </AuthStack.Navigator>
   );
 };
