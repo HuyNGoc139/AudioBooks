@@ -39,4 +39,5 @@ export const Colors = {
   black666: '#666666',
   blackB3: '#B3B3B3',
   neroGrey: '#262626',
+  primary3: '#FBF8F2',
 };

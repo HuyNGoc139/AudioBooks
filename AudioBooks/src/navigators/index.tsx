@@ -16,7 +16,7 @@ const RootNavigator = () => {
   //     }
   //   }, [authQuery.isLoading, isAuth]);
 
-  const isAuth = true;
+  const isAuth = false;
 
   return (
     <NavigationContainer>

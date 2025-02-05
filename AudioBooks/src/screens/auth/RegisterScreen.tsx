@@ -21,6 +21,8 @@ import {TAuthStackParamList} from '@src/types/routes/auth.route';
 import {Colors} from '@src/styles';
 import {AppText} from '@src/components/AppText';
 import {TickCircle} from 'iconsax-react-native';
+import Container from '@src/components/Container';
+import ButtonComponent from '@src/components/ButtonComponent';
 
 const RegisterScreen = () => {
   const navigation =
@@ -29,7 +31,20 @@ const RegisterScreen = () => {
   const RegisterSchema = useMemo(
     () =>
       yup.object().shape({
-        accountname: yup.string().required('Vui lòng không để trống'),
+        accountname: yup
+          .string()
+          .required('Vui lòng không để trống')
+          .matches(
+            /^[a-zA-Z0-9]+$/,
+            'Tài khoản không được chứa ký tự đặc biệt hoặc dấu cách',
+          ),
+        username: yup
+          .string()
+          .required('Vui lòng không để trống')
+          .matches(
+            /^[a-zA-Z ]+$/,
+            'Tên người dùng chỉ được chứa chữ cái và dấu cách, không được chứa số hoặc ký tự đặc biệt',
+          ),
         email: yup
           .string()
           .required('Vui lòng không để trống ô email')
@@ -38,7 +53,7 @@ const RegisterScreen = () => {
           .string()
           .required('Vui lòng không để trống các ô mật khẩu')
           .matches(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%*?&!.-_> </^~`])[A-Za-z\d@#$%*?&!.-_> </^~`]{6,15}$/,
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%*?&!.-_> </^~`])[A-Za-z\d@#$%*?&!.-_> </^~`]{6,30}$/,
             'Vui lòng nhập đúng định dạng',
           ),
         confirmPassword: yup
@@ -60,12 +75,13 @@ const RegisterScreen = () => {
       password: '',
       email: '',
       confirmPassword: '',
+      username: '',
     },
     resolver: yupResolver(RegisterSchema),
     mode: 'all',
   });
   const checkOne =
-    watch('password')?.length >= 6 && watch('password')?.length <= 15;
+    watch('password')?.length >= 6 && watch('password')?.length <= 30;
 
   const checkTwo =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%*?&!.-_> </^~`])/.test(
@@ -77,12 +93,14 @@ const RegisterScreen = () => {
     password: string;
     email: string;
     confirmPassword: string;
+    username: string;
   }) => {
     if (checkOne && checkTwo) {
       console.log('Tài khoản:', data.accountname);
       console.log('Mật khẩu:', data.password);
       console.log('Mật khẩu:', data.email);
       console.log('Mật khẩu:', data.confirmPassword);
+      console.log('Mật khẩu:', data.username);
       Alert.alert(
         'Thông tin đăng nhập',
         `Tài khoản: ${data.accountname}\nMật khẩu: ${data.password}`,
@@ -98,28 +116,36 @@ const RegisterScreen = () => {
       : Colors.nero;
 
   return (
-    <View style={styles.container}>
+    <Container>
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{flexGrow: 1}}>
+        contentContainerStyle={{flexGrow: 1}}
+        style={styles.container}>
         <HeaderComponent title="Đăng Ký" />
         <Image
           style={{
             width: 300,
             height: 300,
-            backgroundColor: 'white',
+            backgroundColor: Colors.primary3,
             alignSelf: 'center',
           }}
           source={Images.logo}
         />
         <FloatingLabelInput
+          label={'Tên Người Dùng'}
+          isRequired
+          value={watch('username')}
+          onChangeText={text => setValue('username', text)}
+          errorMessages={errors?.username?.message}
+        />
+        <FloatingLabelInput
           label={'Tài Khoản'}
           isRequired
+          wrapperStyle={{marginTop: 10}}
           value={watch('accountname')}
           onChangeText={text => setValue('accountname', text)}
           errorMessages={errors?.accountname?.message}
         />
-
         <FloatingLabelInput
           label={'Email'}
           isRequired
@@ -155,7 +181,7 @@ const RegisterScreen = () => {
 
             <AppText
               style={[styles.validationText, {color: textColor(checkOne)}]}>
-              {'Độ dài mật khẩu phải từ 6 đến 15 ký tự'}
+              {'Độ dài mật khẩu phải từ 6 đến 30 ký tự'}
             </AppText>
           </View>
 
@@ -172,11 +198,7 @@ const RegisterScreen = () => {
             </AppText>
           </View>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleSubmit(onSubmit)}>
-          <Text style={styles.buttonText}>Đăng Ký</Text>
-        </TouchableOpacity>
+        <ButtonComponent title="Đăng Ký" onPress={handleSubmit(onSubmit)} />
         <SpaceComponent height={80} />
         <View style={{flexDirection: 'row'}}>
           <View style={styles.line}></View>
@@ -196,35 +218,12 @@ const RegisterScreen = () => {
           </Text>
         </View>
       </KeyboardAwareScrollView>
-    </View>
+    </Container>
   );
 };
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-    backgroundColor: Colors.white,
-  },
-  imag: {
-    width: 400,
-    height: 300,
-    marginTop: 20,
-  },
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
-    padding: 20,
-  },
-  button: {
-    backgroundColor: Colors.primary,
-    padding: 15,
-    borderRadius: 100,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  buttonText: {
-    color: Colors.white,
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   line: {
     width: '100%',

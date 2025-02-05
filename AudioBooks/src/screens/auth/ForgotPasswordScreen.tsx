@@ -16,6 +16,7 @@ import styles from './styles';
 import {ArrowLeft2} from 'iconsax-react-native';
 import HeaderComponent from '@src/components/HeaderComponent';
 import SpaceComponent from '@src/components/SpaceComponent';
+import Container from '@src/components/Container';
 
 const ForgotPasswordScreen = () => {
   const navigation = useNavigation();
@@ -45,7 +46,7 @@ const ForgotPasswordScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeAreaView}>
+    <Container>
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         style={styles.container}>
@@ -95,7 +96,7 @@ const ForgotPasswordScreen = () => {
           />
         </View>
       </KeyboardAwareScrollView>
-    </SafeAreaView>
+    </Container>
   );
 };
 const style = StyleSheet.create({

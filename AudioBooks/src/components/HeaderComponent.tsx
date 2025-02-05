@@ -6,16 +6,21 @@ import {useNavigation} from '@react-navigation/native';
 interface Props {
   title: string;
   color?: string;
+  noBack?: boolean;
 }
 
 const HeaderComponent = (props: Props) => {
-  const {title, color} = props;
+  const {title, color, noBack} = props;
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <ArrowLeft2 size="24" color="black" />
-      </TouchableOpacity>
+      {!noBack ? (
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <ArrowLeft2 size="24" color="black" />
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
       <Text
         style={{
           fontSize: 18,
@@ -35,6 +40,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 16,
   },
 });
 export default HeaderComponent;

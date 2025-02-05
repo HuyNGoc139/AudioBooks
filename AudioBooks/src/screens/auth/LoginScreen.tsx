@@ -31,6 +31,8 @@ import {useNavigation} from '@react-navigation/native';
 import SpaceComponent from '@src/components/SpaceComponent';
 import {TAuthStackParamList} from '@src/types/routes/auth.route';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import Container from '@src/components/Container';
+import ButtonComponent from '@src/components/ButtonComponent';
 
 const LoginScreen = () => {
   const navigation =
@@ -80,7 +82,7 @@ const LoginScreen = () => {
           .string()
           .required('Vui lòng không để trống các ô mật khẩu')
           .matches(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%*?&!.-_> </^~`])[A-Za-z\d@#$%*?&!.-_> </^~`]{6,15}$/,
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%*?&!.-_> </^~`])[A-Za-z\d@#$%*?&!.-_> </^~`]{6,30}$/,
             'Vui lòng nhập đúng định dạng',
           ),
       }),
@@ -101,7 +103,7 @@ const LoginScreen = () => {
     mode: 'all',
   });
   const checkOne =
-    watch('password')?.length >= 6 && watch('password')?.length <= 15;
+    watch('password')?.length >= 6 && watch('password')?.length <= 30;
 
   const checkTwo =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%*?&!.-_> </^~`])/.test(
@@ -124,7 +126,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.safeAreaView}>
+    <Container>
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         style={styles.container}
@@ -134,7 +136,7 @@ const LoginScreen = () => {
           style={{
             width: 300,
             height: 300,
-            backgroundColor: 'white',
+            backgroundColor: Colors.primary3,
             alignSelf: 'center',
           }}
           source={Images.logo}
@@ -161,11 +163,7 @@ const LoginScreen = () => {
             <Text style={styles.textforgot}>Quên Mật Khẩu?</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleSubmit(onSubmit)}>
-          <Text style={styles.buttonText}>Đăng Nhập</Text>
-        </TouchableOpacity>
+        <ButtonComponent title="Đăng Nhập" onPress={handleSubmit(onSubmit)} />
         <SpaceComponent height={80} />
         <View style={{flexDirection: 'row'}}>
           <View style={styles.line}></View>
@@ -185,36 +183,13 @@ const LoginScreen = () => {
           </Text>
         </View>
       </KeyboardAwareScrollView>
-    </View>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-    backgroundColor: Colors.white,
-  },
-  imag: {
-    width: 400,
-    height: 300,
-    marginTop: 20,
-  },
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
-    padding: 20,
-  },
-  button: {
-    backgroundColor: Colors.primary,
-    padding: 15,
-    borderRadius: 100,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  buttonText: {
-    color: Colors.white,
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   line: {
     width: '100%',

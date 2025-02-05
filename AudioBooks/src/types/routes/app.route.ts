@@ -1,8 +1,11 @@
-export type TAppStackParamList = {};
+export type TAppStackParamList = {
+  Topic: undefined;
+  HomeTab: undefined;
+};
 export type TBottomTabParamList = {
-  Dashboard: undefined;
-  CategoriesNavigator: undefined;
-  QRCode: undefined;
-  Notifications: undefined;
-  AccountNavigator: undefined;
+  Home: undefined;
+  Challenge: undefined;
+  Library: undefined;
+  Notification: undefined;
+  Profile: undefined;
 };
