@@ -19,6 +19,8 @@ import {useMemo} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {TAuthStackParamList} from '@src/types/routes/auth.route';
 import {Colors} from '@src/styles';
+import {AppText} from '@src/components/AppText';
+import {TickCircle} from 'iconsax-react-native';
 
 const RegisterScreen = () => {
   const navigation =
@@ -87,6 +89,14 @@ const RegisterScreen = () => {
       );
     }
   };
+
+  const textColor = (check: boolean) =>
+    watch('password')
+      ? check
+        ? Colors.kellyGreen
+        : Colors.mediumCarmine
+      : Colors.nero;
+
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView
@@ -139,7 +149,29 @@ const RegisterScreen = () => {
           errorMessages={errors?.confirmPassword?.message}
         />
 
-        <View></View>
+        <View style={styles.validationTextContainer}>
+          <View style={styles.validationTextRow}>
+            <TickCircle color={textColor(checkOne)} />
+
+            <AppText
+              style={[styles.validationText, {color: textColor(checkOne)}]}>
+              {'Độ dài mật khẩu phải từ 6 đến 15 ký tự'}
+            </AppText>
+          </View>
+
+          <View style={styles.validationTextRow}>
+            <TickCircle color={textColor(checkTwo)} />
+
+            <AppText
+              style={[styles.validationText, {color: textColor(checkTwo)}]}>
+              {
+                'Mật khẩu phải bao gồm chữ viết hoa, chữ viết thường, số và ít nhất 1 kí tự đặc biệt.'
+              }{' '}
+              {'\n'}
+              {'@#$%*?&!.-_> </^~`'}{' '}
+            </AppText>
+          </View>
+        </View>
         <TouchableOpacity
           style={styles.button}
           onPress={handleSubmit(onSubmit)}>
@@ -211,6 +243,26 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-end',
     marginBottom: 20,
+  },
+  validationTextContainer: {
+    flex: 1,
+    marginTop: 20,
+    marginHorizontal: 10,
+  },
+
+  validationTextRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 15,
+  },
+
+  validationText: {
+    fontSize: 14,
+    flex: 1,
+    color: Colors.nero,
+    marginLeft: 15,
+    textAlign: 'justify',
+    lineHeight: 20,
   },
 });
 export default RegisterScreen;
