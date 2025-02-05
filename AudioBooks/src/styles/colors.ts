@@ -40,4 +40,5 @@ export const Colors = {
   blackB3: '#B3B3B3',
   neroGrey: '#262626',
   primary3: '#FBF8F2',
+  select: '#F5EFE1',
 };

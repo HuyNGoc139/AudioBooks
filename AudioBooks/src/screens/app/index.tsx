@@ -1,17 +1,7 @@
 import React, {useEffect, useState} from 'react';
 // import BootSplash from 'react-native-bootsplash';
-// import LoginScreen from './LoginScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import LoginScreen from '../auth/LoginScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {
-  Book,
-  Home,
-  Menu,
-  Message,
-  Notification,
-  Profile2User,
-} from 'iconsax-react-native';
 import {Text} from 'react-native';
 import HomeScreen from './HomScreen';
 import ChallengeScreen from './ChallengeScreen';
@@ -27,6 +17,7 @@ import {
   TAppStackParamList,
   TBottomTabParamList,
 } from '@src/types/routes/app.route';
+import {Colors} from '@src/styles';
 
 const AppStack = createNativeStackNavigator<TAppStackParamList>();
 const Tab = createBottomTabNavigator<TBottomTabParamList>();
@@ -40,10 +31,11 @@ const HomeTab = () => (
         borderTopColor: 'transparent',
         elevation: 0,
         height: 56,
+        marginBottom: 2,
       },
       tabBarIcon: ({focused}) => {
         let icon;
-        const iconColor = focused ? '#4267B2' : 'black'; // Màu xanh Facebook khi được chọn, màu xám khi không được chọn
+        const iconColor = focused ? Colors.primary2 : Colors.black30; // Màu xanh Facebook khi được chọn, màu xám khi không được chọn
 
         switch (route.name) {
           case 'Home':
@@ -92,7 +84,12 @@ const HomeTab = () => (
             break;
         }
         return (
-          <Text style={{color: focused ? '#4267B2' : 'black', fontSize: 12}}>
+          <Text
+            style={{
+              color: focused ? Colors.primary2 : Colors.black30,
+              fontSize: 14,
+              fontWeight: '500',
+            }}>
             {label}
           </Text>
         );
