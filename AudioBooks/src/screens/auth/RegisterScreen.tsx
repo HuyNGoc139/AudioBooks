@@ -23,11 +23,14 @@ import {AppText} from '@src/components/AppText';
 import {TickCircle} from 'iconsax-react-native';
 import Container from '@src/components/Container';
 import ButtonComponent from '@src/components/ButtonComponent';
+import {useDispatch} from 'react-redux';
+import {AppDispatch} from '@src/hooks/store';
+import {registerUser} from '@src/hooks/authAction';
 
 const RegisterScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<TAuthStackParamList>>();
-
+  const dispatch = useDispatch<AppDispatch>();
   const RegisterSchema = useMemo(
     () =>
       yup.object().shape({
@@ -88,7 +91,7 @@ const RegisterScreen = () => {
       watch('password'),
     );
 
-  const onSubmit = (data: {
+  const onSubmit = async (data: {
     accountname: string;
     password: string;
     email: string;
@@ -96,15 +99,15 @@ const RegisterScreen = () => {
     username: string;
   }) => {
     if (checkOne && checkTwo) {
-      console.log('Tài khoản:', data.accountname);
-      console.log('Mật khẩu:', data.password);
-      console.log('Mật khẩu:', data.email);
-      console.log('Mật khẩu:', data.confirmPassword);
-      console.log('Mật khẩu:', data.username);
-      Alert.alert(
-        'Thông tin đăng nhập',
-        `Tài khoản: ${data.accountname}\nMật khẩu: ${data.password}`,
+      await dispatch(
+        registerUser({
+          accountname: data.accountname,
+          password: data.password,
+          email: data.email,
+          username: data.username,
+        }) as any,
       );
+      navigation.goBack();
     }
   };
 

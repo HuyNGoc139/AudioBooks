@@ -8,11 +8,18 @@ import {Colors} from '@src/styles';
 import {TAppStackParamList} from '@src/types/routes/app.route';
 import React, {useCallback, useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
+import {API_ENDPOINT} from '@env';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '@src/hooks/store';
+import {updateFavorite} from '@src/hooks/authAction';
 
 const TopicScreen = () => {
   const [selectedTopics, setSelectedTopics] = useState<any>([]);
   const navigation =
     useNavigation<NativeStackNavigationProp<TAppStackParamList>>();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useDispatch<AppDispatch>();
+  console.log(user);
   const topics = [
     'Tâm Lý Học',
     'Khoa Học',
@@ -44,10 +51,15 @@ const TopicScreen = () => {
     if (selectedTopics.length == 0) {
       Alert.alert('Vui lòng chọn một chủ đề!');
     } else {
-      console.log(selectedTopics);
+      dispatch(
+        updateFavorite({
+          userId: user?.id || '',
+          favorite: selectedTopics,
+        }) as any,
+      );
       navigation.replace('HomeTab');
     }
-  }, [navigation, selectedTopics]);
+  }, [navigation, selectedTopics, user?.id, dispatch]);
 
   return (
     <Container>

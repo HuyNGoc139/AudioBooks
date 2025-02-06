@@ -1,23 +1,27 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {loginUser, logoutUser, registerUser, updateUser} from '../authAction';
+import {
+  loginUser,
+  logoutUser,
+  registerUser,
+  updateFavorite,
+} from '../authAction';
 interface User {
   email: string;
-  uid: string;
+  id: string;
   username: string;
   DateBitrhDay?: any;
-  url?: string;
-  friends?: string[];
+  accountname?: string;
+  favorite?: string[];
   createAt?: string;
-  userId?: string;
   TwoFA?: boolean;
   emailOTP?: string;
-  emailOTPActive?: boolean;
 }
 interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
   error: string | null;
   loading: boolean;
+  token: string | null;
 }
 
 const initialState: AuthState = {
@@ -25,6 +29,7 @@ const initialState: AuthState = {
   user: null,
   error: null,
   loading: false,
+  token: null,
 };
 const authSlice = createSlice({
   name: 'auth',
@@ -39,7 +44,8 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isAuthenticated = true;
-        // state.user = action.payload;
+        state.user = action.payload;
+        state.token = action.payload.token;
         state.loading = false;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -54,7 +60,7 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.isAuthenticated = true;
+        state.isAuthenticated = false;
         // state.user = action.payload;
         state.loading = false;
       })
@@ -63,20 +69,19 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.error = action.payload as null;
       })
-      //xu lu cap naht
-      .addCase(updateUser.pending, state => {
+      .addCase(updateFavorite.pending, state => {
         state.loading = true;
         state.error = null;
       })
-      // Xử lý khi cập nhật  thành công
-      .addCase(updateUser.fulfilled, (state, action) => {
-        // state.user = { ...state.user, ...action.payload }; // Cập nhật dữ liệu người dùng trong Redux store
+      .addCase(updateFavorite.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.favorite = action.payload.favorite; // Cập nhật danh sách yêu thích
+        }
         state.loading = false;
       })
-      // Xử lý khi có lỗi trong quá trình cập nhật
-      .addCase(updateUser.rejected, (state, action) => {
+      .addCase(updateFavorite.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string; // Cập nhật thông báo lỗi
+        state.error = action.payload as string; // Xử lý lỗi
       })
 
       // Xử lý đăng xuất
@@ -86,6 +91,7 @@ const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, state => {
         state.isAuthenticated = false;
         state.user = null;
+        state.token = null;
         state.error = null;
         state.loading = false;
       })

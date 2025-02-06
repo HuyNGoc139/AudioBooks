@@ -33,47 +33,12 @@ import {TAuthStackParamList} from '@src/types/routes/auth.route';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Container from '@src/components/Container';
 import ButtonComponent from '@src/components/ButtonComponent';
+import {loginUser} from '@src/hooks/authAction';
 
 const LoginScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<TAuthStackParamList>>();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errText, setErrorText] = useState<string>('');
-  const [isVisible, setIsVisible] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const errorMessage = useMemo(() => errText, [errText]);
-  const [user, setUser] = useState<any>();
-  const handleLogin = useCallback(async () => {
-    if (!email || !password) {
-      setErrorText('Please enter your email and password!!!');
-    } else if (!validateEmail(email)) {
-      setErrorText('Please enter the correct email format');
-    } else if (!validatePasswordLogin(password)) {
-      setErrorText('Password must be at least 6 characters');
-    } else {
-      setErrorText('');
-      try {
-      } catch (error) {
-        if (error instanceof Error) {
-          setErrorText(error.message || 'Login failed. Please try again.');
-        } else {
-          setErrorText('An unknown error occurred. Please try again.');
-        }
-      }
-    }
-  }, [email, password, navigation]);
-
-  const handleResetPassword = async () => {
-    try {
-      await sendResetPasswordEmail(email);
-      Alert.alert('Thành công', 'Email đặt lại mật khẩu đã được gửi!');
-    } catch (error: any) {
-      Alert.alert('Lỗi', error.message);
-    }
-  };
-
   const LoginSchema = useMemo(
     () =>
       yup.object().shape({
@@ -110,13 +75,13 @@ const LoginScreen = () => {
       watch('password'),
     );
 
-  const onSubmit = (data: {accountname: string; password: string}) => {
+  const onSubmit = async (data: {accountname: string; password: string}) => {
     if (checkOne && checkTwo) {
-      console.log('Tài khoản:', data.accountname);
-      console.log('Mật khẩu:', data.password);
-      Alert.alert(
-        'Thông tin đăng nhập',
-        `Tài khoản: ${data.accountname}\nMật khẩu: ${data.password}`,
+      await dispatch(
+        loginUser({
+          accountname: data.accountname,
+          password: data.password,
+        }) as any,
       );
     }
   };
