@@ -12,7 +12,7 @@ connectDB();
 
 // Import routes
 const authRoutes = require("./api/routers/authRoutes");
-const bookRoutes = require("./api/routers/authRoutes");
+const bookRoutes = require("./api/routers/bookRoutes");
 const userRoutes = require("./api/routers/userRoutes");
 
 app.use("/api/auth", authRoutes);

@@ -41,4 +41,5 @@ export const Colors = {
   neroGrey: '#262626',
   primary3: '#FBF8F2',
   select: '#F5EFE1',
+  homebg: '#768c80',
 };
