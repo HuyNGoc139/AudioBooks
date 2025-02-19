@@ -14,10 +14,14 @@ connectDB();
 const authRoutes = require("./api/routers/authRoutes");
 const bookRoutes = require("./api/routers/bookRoutes");
 const userRoutes = require("./api/routers/userRoutes");
+const otpRoutes = require("./api/routers/otpRoutes");
+const authorRoutes = require("./api/routers/authorRoutes");
 
+app.use("/api/authors", authorRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/otp", otpRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

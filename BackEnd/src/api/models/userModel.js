@@ -8,6 +8,18 @@ const userSchema = new mongoose.Schema(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         favorite: { type: [String], default: [] },
+        dateOfBirth: { type: Date }, // Ngày tháng năm sinh
+        avatarURL: { type: String }, // URL ảnh đại diện
+        savedBooks: [
+            { type: mongoose.Schema.Types.ObjectId, ref: "Book" }, // Danh sách sách đã lưu
+        ],
+        readChapters: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Chapter",
+                required: true,
+            },
+        ],
     },
     { timestamps: true } // Tự động thêm createdAt và updatedAt
 );

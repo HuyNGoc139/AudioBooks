@@ -6,7 +6,9 @@ const Rating = require("../models/ratingModel");
 // Lấy danh sách tất cả sách
 exports.getAllBooks = async (req, res) => {
     try {
-        const books = await Book.find().populate("chapters comments ratings");
+        const books = await Book.find().populate(
+            "chapters comments ratings author"
+        );
         res.json(books);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -28,7 +30,7 @@ exports.createBook = async (req, res) => {
 exports.getBookById = async (req, res) => {
     try {
         const book = await Book.findById(req.params.id).populate(
-            "chapters comments ratings"
+            "chapters comments ratings author"
         );
         if (!book) return res.status(404).json({ message: "Book not found" });
         res.json(book);
