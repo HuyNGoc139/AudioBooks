@@ -10,10 +10,10 @@ import {RootState} from '@src/hooks/store';
 const RootStack = createNativeStackNavigator();
 
 const RootNavigator = () => {
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated,
-  );
-
+  // const isAuthenticated = useSelector(
+  //   (state: RootState) => state.auth.isAuthenticated,
+  // );
+  const isAuthenticated = true;
   //   useEffect(() => {
   //     if (!authQuery.isLoading && isAuth) {
   //       BootSplash.hide({ fade: true });

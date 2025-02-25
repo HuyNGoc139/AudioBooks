@@ -6,6 +6,7 @@ import LoginScreen from './LoginScreen';
 import ForgotPasswordScreen from './ForgotPasswordScreen';
 import RegisterScreen from './RegisterScreen';
 import {TAuthStackParamList} from '@src/types/routes/auth.route';
+import OnboardingScreen from '../onboarding/OnBoardingScreen';
 
 const AuthStack = createNativeStackNavigator<TAuthStackParamList>();
 const AuthNavigator = () => {
@@ -16,7 +17,8 @@ const AuthNavigator = () => {
   return (
     <AuthStack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="Login">
+      initialRouteName="Onboarding">
+      <AuthStack.Screen name="Onboarding" component={OnboardingScreen} />
       <AuthStack.Screen name="Login" component={LoginScreen} />
       <AuthStack.Screen
         name="ForgotPassword"
