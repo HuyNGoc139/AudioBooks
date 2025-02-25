@@ -86,8 +86,8 @@ const TopicScreen = () => {
       </View>
 
       <Text style={styles.instruction}>
-        * Chọn ít nhất 1 chủ đề để Mọt giúp bạn tìm những đầu sách phù hợp với
-        bạn.
+        * Chọn ít nhất 1 chủ đề để chúng mình giúp bạn tìm những đầu sách phù
+        hợp với bạn.
       </Text>
 
       <ButtonComponent

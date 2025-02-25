@@ -5,4 +5,5 @@ export const Fonts = {
   regular: 'Inter-Regular',
   semiBold: 'Inter-SemiBold',
   thin: 'Inter-Thin',
+  italicBold: 'Inter-BoldItalic',
 };
