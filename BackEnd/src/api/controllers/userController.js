@@ -147,7 +147,7 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.markChapterAsRead = async (req, res) => {
-    const { userId, chapterId } = req.body;
+    const { userId, chapterId, bookId } = req.body;
 
     try {
         // Kiểm tra người dùng có tồn tại không
@@ -156,21 +156,44 @@ exports.markChapterAsRead = async (req, res) => {
             return res.status(404).json({ error: "Người dùng không tồn tại" });
         }
 
-        // Kiểm tra xem chương có tồn tại không
-        const chapterExists = await Chapter.findById(chapterId);
-        if (!chapterExists) {
-            return res.status(400).json({ message: "Chương không tồn tại" });
+        // Kiểm tra xem sách có tồn tại không
+        const book = await Book.findById(bookId);
+        if (!book) {
+            return res.status(400).json({ message: "Sách không tồn tại" });
         }
 
-        // Kiểm tra xem chương đã được đánh dấu đọc chưa
-        if (user.readChapters.includes(chapterId)) {
+        // Kiểm tra xem chương có tồn tại không và có thuộc sách không
+        const chapter = await Chapter.findOne({
+            _id: chapterId,
+            book_id: bookId,
+        });
+        if (!chapter) {
             return res
                 .status(400)
-                .json({ message: "Chương này đã được đánh dấu là đã đọc" });
+                .json({
+                    message: "Chương không thuộc sách này hoặc không tồn tại",
+                });
         }
 
-        // Thêm chương vào danh sách đã đọc
-        user.readChapters.push(chapterId);
+        // Tìm xem sách đã có trong danh sách readChapters chưa
+        const existingBook = user.readChapters.find(
+            (entry) => entry.bookId.toString() === bookId.toString()
+        );
+
+        if (existingBook) {
+            // Nếu chương đã được đánh dấu đọc trước đó, không thêm lại
+            if (existingBook.chapterIds.includes(chapterId)) {
+                return res
+                    .status(400)
+                    .json({ message: "Chương này đã được đánh dấu là đã đọc" });
+            }
+
+            // Thêm chapterId vào danh sách chương đã đọc
+            existingBook.chapterIds.push(chapterId);
+        } else {
+            // Nếu sách chưa có trong readChapters, thêm mới
+            user.readChapters.push({ bookId, chapterIds: [chapterId] });
+        }
 
         await user.save();
         res.status(200).json({
@@ -191,7 +214,9 @@ exports.getReadChapters = async (req, res) => {
     const { userId } = req.params;
 
     try {
-        const user = await User.findById(userId).populate("readChapters"); // Lấy thông tin sách
+        const user = await User.findById(userId)
+            .populate("readChapters.bookId") // Lấy thông tin sách
+            .populate("readChapters.chapterIds"); // Lấy thông tin chương
 
         if (!user) {
             return res.status(404).json({ error: "Người dùng không tồn tại" });

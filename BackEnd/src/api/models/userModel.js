@@ -8,22 +8,28 @@ const userSchema = new mongoose.Schema(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         favorite: { type: [String], default: [] },
-        dateOfBirth: { type: Date }, // Ngày tháng năm sinh
-        avatarURL: { type: String }, // URL ảnh đại diện
-        savedBooks: [
-            { type: mongoose.Schema.Types.ObjectId, ref: "Book" }, // Danh sách sách đã lưu
-        ],
+        dateOfBirth: { type: Date },
+        avatarURL: { type: String },
+        savedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
         readChapters: [
             {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Chapter",
-                required: true,
+                bookId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Book",
+                    required: true,
+                },
+                chapterIds: [
+                    {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: "Chapter",
+                        required: true,
+                    },
+                ],
             },
         ],
     },
-    { timestamps: true } // Tự động thêm createdAt và updatedAt
+    { timestamps: true }
 );
-
 // Mã hóa mật khẩu trước khi lưu
 userSchema.pre("save", async function (next) {
     if (this.isModified("password")) {
