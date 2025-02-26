@@ -2,7 +2,7 @@ const Book = require("../models/bookModel");
 const Chapter = require("../models/chapterModel");
 const Comment = require("../models/commentModel");
 const Rating = require("../models/ratingModel");
-
+const Author = require("../models/authorModel");
 // Lấy danh sách tất cả sách
 exports.getAllBooks = async (req, res) => {
     try {
@@ -18,8 +18,22 @@ exports.getAllBooks = async (req, res) => {
 // Tạo một cuốn sách mới
 exports.createBook = async (req, res) => {
     try {
-        const newBook = new Book(req.body);
+        const { author: authorId, ...bookData } = req.body;
+
+        // Kiểm tra tác giả có tồn tại không
+        const author = await Author.findById(authorId);
+        if (!author) {
+            return res.status(404).json({ message: "Author not found" });
+        }
+
+        // Tạo sách mới
+        const newBook = new Book({ ...bookData, author: authorId });
         await newBook.save();
+
+        // Cập nhật danh sách sách của tác giả
+        author.books.push(newBook._id);
+        await author.save();
+
         res.status(201).json(newBook);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -42,23 +56,55 @@ exports.getBookById = async (req, res) => {
 // Xóa một cuốn sách
 exports.deleteBook = async (req, res) => {
     try {
+        const book = await Book.findById(req.params.id);
+        if (!book) {
+            return res.status(404).json({ message: "Book not found" });
+        }
+
+        // Xóa bookId khỏi danh sách books của tác giả
+        await Author.findByIdAndUpdate(book.author, {
+            $pull: { books: book._id },
+        });
+
+        // Xóa sách
         await Book.findByIdAndDelete(req.params.id);
-        res.json({ message: "Book deleted" });
+
+        res.json({ message: "Book deleted successfully" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
 
-//  Thêm chương mới vào sách
 exports.addChapter = async (req, res) => {
     try {
         const { book_id, title, content, audio_url } = req.body;
+
+        // Kiểm tra sách có tồn tại không
         const book = await Book.findById(book_id);
         if (!book) return res.status(404).json({ message: "Book not found" });
 
-        const newChapter = new Chapter({ book_id, title, content, audio_url });
+        // Tìm chương có index lớn nhất trong sách
+        const lastChapter = await Chapter.findOne({ book_id })
+            .sort({ index: -1 }) // Sắp xếp giảm dần theo index
+            .select("index");
+
+        // Nếu lastChapter không tồn tại hoặc index bị undefined, đặt index = 1
+        const newIndex =
+            lastChapter && !isNaN(lastChapter.index)
+                ? lastChapter.index + 1
+                : 1;
+
+        // Tạo chương mới với index hợp lệ
+        const newChapter = new Chapter({
+            book_id,
+            title,
+            content,
+            audio_url,
+            index: newIndex,
+        });
         await newChapter.save();
 
+        // Thêm chương vào danh sách chapters của sách
         book.chapters.push(newChapter._id);
         await book.save();
 

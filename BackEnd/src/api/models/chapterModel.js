@@ -10,6 +10,7 @@ const chapterSchema = new mongoose.Schema(
         title: { type: String, required: true },
         content: String,
         audio_url: String,
+        index: { type: Number, required: true },
     },
     { timestamps: true }
 );

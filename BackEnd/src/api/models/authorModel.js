@@ -2,14 +2,15 @@ const mongoose = require("mongoose");
 
 const authorSchema = new mongoose.Schema(
     {
-        name: { type: String, required: true }, // Tên tác giả
-        birthplace: { type: String, required: true }, // Quê quán
-        birthdate: { type: Date, required: true }, // Ngày sinh
-        biography: { type: String }, // Tiểu sử
+        name: { type: String, required: true },
+        birthplace: { type: String, required: true },
+        birthdate: { type: Date, required: true },
+        biography: { type: String },
         avatarUrl: { type: String },
+        books: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }], // Danh sách sách của tác giả
     },
     { timestamps: true }
-); // Tự động tạo createdAt và updatedAt
+);
 
 const Author = mongoose.model("Author", authorSchema);
 
