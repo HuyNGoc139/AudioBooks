@@ -5,17 +5,26 @@ import {View, StyleSheet, ViewStyle} from 'react-native';
 interface ContainerProps {
   children: React.ReactNode;
   style?: ViewStyle;
+  bgColor?: string;
 }
 
-const Container: React.FC<ContainerProps> = ({children, style}) => {
-  return <View style={[styles.container, style]}>{children}</View>;
+const Container: React.FC<ContainerProps> = ({children, style, bgColor}) => {
+  return (
+    <View
+      style={[
+        styles.container,
+        style,
+        {backgroundColor: bgColor ? bgColor : Colors.primary3},
+      ]}>
+      {children}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primary3, // Màu nền
-    padding: 20,
+    padding: 18,
   },
 });
 

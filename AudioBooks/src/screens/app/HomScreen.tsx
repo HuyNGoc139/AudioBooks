@@ -21,11 +21,16 @@ import SectionHeader from './HomeComponent/MoreButton';
 import AuthorList from './HomeComponent/Author';
 import AuthorItem from './HomeComponent/Author';
 import BookCard from './HomeComponent/BookCard';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {TAppStackParamList} from '@src/types/routes/app.route';
 
 const HomeScreen = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const currentTime = new Date();
   const [selectedTopics, setSelectedTopics] = useState<string | null>(null);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<TAppStackParamList>>();
 
   const bookData = {
     image:
@@ -119,8 +124,12 @@ const HomeScreen = () => {
     setSelectedTopics(topic);
   };
 
+  const onNavToAuthor = () => {
+    navigation.navigate('Author');
+  };
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} nestedScrollEnabled={true}>
       <Image style={styles.imagebg} source={Images.home}></Image>
       <View style={{flexDirection: 'row', position: 'absolute', top: 16}}>
         <View style={styles.quoteBox}>
@@ -163,10 +172,7 @@ const HomeScreen = () => {
           )}
         />
         <BookList books={books} isSave isShowTitle />
-        <SectionHeader
-          title="Sách hay trong tuần"
-          onPress={() => console.log('Xem thêm được bấm!')}
-        />
+        <SectionHeader title="Sách hay trong tuần" onPress={onNavToAuthor} />
 
         <BookCard book={bookData} />
 
@@ -257,7 +263,7 @@ const styles = StyleSheet.create({
   topicButton: {
     backgroundColor: 'white',
     borderRadius: 100,
-    padding: 16,
+    padding: 12,
     margin: 5,
     borderWidth: 1,
     borderColor: Colors.black15,

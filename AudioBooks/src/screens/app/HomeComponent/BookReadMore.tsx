@@ -15,16 +15,21 @@ interface Props {
   isSave?: boolean;
   isProgress?: boolean;
   books: any;
+  isColumn?: boolean;
 }
 
 const BookList = (props: Props) => {
-  const {isShowTitle, isSave, books, isProgress} = props;
+  const {isShowTitle, isSave, books, isProgress, isColumn} = props;
 
   const BookItem = ({item}: {item: any}) => {
     const [saveBook, setSaveBook] = useState<boolean>(true);
     return (
-      <View style={{}}>
-        <View style={styles.bookContainer}>
+      <TouchableOpacity style={{marginHorizontal: isColumn ? 24 : 10}}>
+        <View
+          style={[
+            styles.bookContainer,
+            {width: isColumn ? 136 : 120, height: isColumn ? 204 : 180},
+          ]}>
           <Image
             source={{uri: item.image}}
             style={[styles.bookImage, {height: isProgress ? '90%' : '100%'}]}
@@ -60,24 +65,29 @@ const BookList = (props: Props) => {
           )}
         </View>
         {isShowTitle ? (
-          <View style={styles.center}>
+          <View style={[styles.center, {marginBottom: isColumn ? 20 : 0}]}>
             <Text style={styles.title}>{item.title}</Text>
           </View>
         ) : (
           <></>
         )}
-      </View>
+      </TouchableOpacity>
     );
   };
 
   return (
     <FlatList
       data={books}
-      horizontal
+      key={isColumn ? 'column' : 'row'}
+      numColumns={isColumn ? 2 : 1} // Nếu isColumn = true, hiển thị 2 cột
+      horizontal={!isColumn}
       showsHorizontalScrollIndicator={false}
       keyExtractor={item => item.id}
       renderItem={({item}) => <BookItem item={item} />}
-      contentContainerStyle={styles.listContainer}
+      contentContainerStyle={[
+        styles.listContainer,
+        {alignItems: isColumn ? 'center' : undefined},
+      ]}
       nestedScrollEnabled={true}
     />
   );
@@ -92,11 +102,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bookContainer: {
-    width: 120,
-    height: 180,
     backgroundColor: '#A9A9A9',
     borderRadius: 10,
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',

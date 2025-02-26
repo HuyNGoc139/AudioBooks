@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import BookItem from './BookItem';
+import {Rating} from 'react-native-ratings';
 
 interface BookProps {
   image: string;
@@ -13,7 +14,7 @@ interface BookProps {
 }
 
 const BookCard: React.FC<{book: BookProps}> = ({book}) => {
-  const [rating, setRating] = useState(4.3);
+  const [rating, setRating] = useState(4.8);
   return (
     <View style={styles.container}>
       <BookItem item={book} isSave />
@@ -30,6 +31,18 @@ const BookCard: React.FC<{book: BookProps}> = ({book}) => {
             starSize={20}
             color="#FFD700"
           /> */}
+          <Rating
+            ratingCount={5}
+            readonly
+            imageSize={24}
+            style={{paddingVertical: 10}}
+            jumpValue={0.1}
+            startingValue={rating}
+            fractions={1}
+            onFinishRating={(value: number) => {
+              setRating(value);
+            }}
+          />
         </View>
 
         <Text numberOfLines={3} style={styles.description}>
