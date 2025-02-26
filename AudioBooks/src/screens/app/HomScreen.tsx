@@ -24,6 +24,7 @@ import BookCard from './HomeComponent/BookCard';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {TAppStackParamList} from '@src/types/routes/app.route';
+import TopicsComponent from '@src/components/Topics';
 
 const HomeScreen = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -128,6 +129,10 @@ const HomeScreen = () => {
     navigation.navigate('Author');
   };
 
+  const onNavToBookDetails = () => {
+    navigation.navigate('BookDetails');
+  };
+
   return (
     <ScrollView style={styles.container} nestedScrollEnabled={true}>
       <Image style={styles.imagebg} source={Images.home}></Image>
@@ -154,37 +159,29 @@ const HomeScreen = () => {
       </View>
       <View style={styles.containerBook}>
         <Text style={styles.textTitle}>Chủ đề bạn quan tâm</Text>
-        <FlatList
-          data={topics}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item: any) => item}
-          contentContainerStyle={styles.topicsContainer}
-          renderItem={({item}: {item: any}) => (
-            <TouchableOpacity
-              style={[
-                styles.topicButton,
-                selectedTopics === item && styles.selectedTopicButton,
-              ]}
-              onPress={() => handleTopicPress(item)}>
-              <Text style={styles.topicText}>{item}</Text>
-            </TouchableOpacity>
-          )}
+        <TopicsComponent
+          onPress={handleTopicPress}
+          selectedTopics={selectedTopics}
+          topics={topics}
         />
         <BookList books={books} isSave isShowTitle />
-        <SectionHeader title="Sách hay trong tuần" onPress={onNavToAuthor} />
+        <SectionHeader title="Sách hay trong tuần" onPress={() => {}} />
 
-        <BookCard book={bookData} />
+        <BookCard book={bookData} onPress={onNavToBookDetails} />
 
         <SectionHeader
           title="Tác giả nổi tiếng"
           onPress={() => console.log('Xem thêm được bấm!')}
         />
-        <FlatList
-          data={users}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => <AuthorItem item={item} />}
-        />
+        <View>
+          {users.map((item, index) => (
+            <AuthorItem
+              key={index.toString()}
+              item={item}
+              onPress={onNavToAuthor}
+            />
+          ))}
+        </View>
       </View>
     </ScrollView>
   );

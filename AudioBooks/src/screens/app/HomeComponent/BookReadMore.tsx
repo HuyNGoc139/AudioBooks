@@ -1,5 +1,5 @@
 import {Fonts} from '@src/styles';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  LogBox,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -20,19 +21,22 @@ interface Props {
 
 const BookList = (props: Props) => {
   const {isShowTitle, isSave, books, isProgress, isColumn} = props;
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
   const BookItem = ({item}: {item: any}) => {
     const [saveBook, setSaveBook] = useState<boolean>(true);
     return (
-      <TouchableOpacity style={{marginHorizontal: isColumn ? 24 : 10}}>
+      <TouchableOpacity style={{marginHorizontal: 10}}>
         <View
           style={[
             styles.bookContainer,
-            {width: isColumn ? 136 : 120, height: isColumn ? 204 : 180},
+            {width: isColumn ? 100 : 120, height: isColumn ? 150 : 180},
           ]}>
           <Image
             source={{uri: item.image}}
-            style={[styles.bookImage, {height: isProgress ? '90%' : '100%'}]}
+            style={[styles.bookImage, {height: isProgress ? '92%' : '100%'}]}
           />
           {isSave ? (
             <TouchableOpacity
@@ -66,7 +70,9 @@ const BookList = (props: Props) => {
         </View>
         {isShowTitle ? (
           <View style={[styles.center, {marginBottom: isColumn ? 20 : 0}]}>
-            <Text style={styles.title}>{item.title}</Text>
+            <Text style={[styles.title, {width: isColumn ? 100 : 120}]}>
+              {item.title}
+            </Text>
           </View>
         ) : (
           <></>
@@ -79,14 +85,17 @@ const BookList = (props: Props) => {
     <FlatList
       data={books}
       key={isColumn ? 'column' : 'row'}
-      numColumns={isColumn ? 2 : 1} // Nếu isColumn = true, hiển thị 2 cột
+      numColumns={isColumn ? 3 : 1} // Nếu isColumn = true, hiển thị 2 cột
       horizontal={!isColumn}
       showsHorizontalScrollIndicator={false}
+      scrollEnabled={isColumn}
       keyExtractor={item => item.id}
       renderItem={({item}) => <BookItem item={item} />}
       contentContainerStyle={[
         styles.listContainer,
-        {alignItems: isColumn ? 'center' : undefined},
+        {
+          justifyContent: 'space-between',
+        },
       ]}
       nestedScrollEnabled={true}
     />
@@ -112,12 +121,12 @@ const styles = StyleSheet.create({
   },
   bookImage: {
     width: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'stretch',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
   progressBar: {
-    width: '80%',
+    width: '86%',
     height: 5,
     backgroundColor: '#ddd',
     borderRadius: 5,
@@ -129,7 +138,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   title: {
-    width: 120,
     textAlign: 'center',
     fontFamily: Fonts.medium,
     fontSize: 14,

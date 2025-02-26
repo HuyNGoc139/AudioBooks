@@ -13,28 +13,24 @@ interface BookProps {
   isSaved?: boolean;
 }
 
-const BookCard: React.FC<{book: BookProps}> = ({book}) => {
-  const [rating, setRating] = useState(4.8);
+const BookCard: React.FC<{book: BookProps; onPress: () => void}> = ({
+  book,
+  onPress,
+}) => {
+  const [rating, setRating] = useState(3.5);
   return (
     <View style={styles.container}>
       <BookItem item={book} isSave />
 
-      <TouchableOpacity style={styles.content}>
+      <TouchableOpacity onPress={onPress} style={styles.content}>
         <Text style={styles.title}>{book.title}</Text>
         <Text style={styles.author}>{book.author}</Text>
 
         <View style={styles.ratingContainer}>
-          {/* <StarRating
-            rating={rating}
-            onChange={setRating}
-            enableSwiping={true} // Chỉ hiển thị, không cho chỉnh sửa
-            starSize={20}
-            color="#FFD700"
-          /> */}
           <Rating
             ratingCount={5}
             readonly
-            imageSize={24}
+            imageSize={20}
             style={{paddingVertical: 10}}
             jumpValue={0.1}
             startingValue={rating}

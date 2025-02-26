@@ -8,9 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const AuthorItem: React.FC<{item: any}> = ({item}) => {
+const AuthorItem: React.FC<{item: any; onPress: () => void}> = ({
+  item,
+  onPress,
+}) => {
   return (
-    <TouchableOpacity onPress={() => {}} style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <Image source={{uri: item.avatar}} style={styles.avatar} />
       <View style={styles.textContainer}>
         <Text style={styles.name}>{item.name}</Text>

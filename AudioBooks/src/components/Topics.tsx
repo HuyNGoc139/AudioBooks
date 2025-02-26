@@ -4,12 +4,13 @@ import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 interface Props {
   topics: any[];
-  selectedTopics: string | null;
-  onPress: (item: any) => void;
+  selectedTopics?: string | null;
+  onPress?: (item: any) => void;
+  disable?: boolean;
 }
 
 const TopicsComponent = (props: Props) => {
-  const {topics, selectedTopics, onPress} = props;
+  const {topics, selectedTopics, onPress, disable} = props;
   return (
     <View>
       <FlatList
@@ -20,12 +21,19 @@ const TopicsComponent = (props: Props) => {
         contentContainerStyle={styles.topicsContainer}
         renderItem={({item}: {item: any}) => (
           <TouchableOpacity
+            disabled={disable}
             style={[
               styles.topicButton,
               selectedTopics === item && styles.selectedTopicButton,
             ]}
-            onPress={() => onPress(item)}>
-            <Text style={styles.topicText}>{item}</Text>
+            onPress={() => onPress?.(item)}>
+            <Text
+              style={[
+                styles.topicText,
+                selectedTopics === item && styles.topicselectedText,
+              ]}>
+              {item}
+            </Text>
           </TouchableOpacity>
         )}
       />
@@ -42,14 +50,18 @@ const styles = StyleSheet.create({
     padding: 8,
     margin: 5,
     borderWidth: 1,
-    borderColor: Colors.black15,
+    borderColor: Colors.primary2,
   },
   selectedTopicButton: {
     backgroundColor: Colors.select2,
-    borderColor: Colors.black666,
+    borderColor: Colors.black,
   },
   topicText: {
     textAlign: 'center',
+    color: Colors.primary2,
+  },
+  topicselectedText: {
+    color: Colors.white,
   },
 });
 export default TopicsComponent;

@@ -19,6 +19,7 @@ import {
 } from '@src/types/routes/app.route';
 import {Colors} from '@src/styles';
 import AuthorScreen from './AuthorScreen/AuthorScreen';
+import BookDetailsScreen from './BookDetails/BookDetailsScreen';
 
 const AppStack = createNativeStackNavigator<TAppStackParamList>();
 const Tab = createBottomTabNavigator<TBottomTabParamList>();
@@ -129,6 +130,7 @@ const AppNavigator = () => {
       <AppStack.Screen name="Topic" component={TopicScreen} />
       <AppStack.Screen name="HomeTab" component={HomeTab} />
       <AppStack.Screen name="Author" component={AuthorScreen} />
+      <AppStack.Screen name="BookDetails" component={BookDetailsScreen} />
     </AppStack.Navigator>
   );
 };

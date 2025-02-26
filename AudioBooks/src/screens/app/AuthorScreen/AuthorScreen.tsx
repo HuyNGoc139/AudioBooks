@@ -129,9 +129,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     borderWidth: 2,
     borderColor: '#4A4A4A',
   },
