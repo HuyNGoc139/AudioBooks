@@ -3,6 +3,7 @@ import {AppText} from './AppText';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {ArrowLeft2} from 'iconsax-react-native';
 import {useNavigation} from '@react-navigation/native';
+import {Colors} from '@src/styles';
 interface Props {
   title: string;
   color?: string;
@@ -24,12 +25,12 @@ const HeaderComponent = (props: Props) => {
       )}
       <Text
         style={{
-          fontSize: 18,
+          fontSize: 20,
           textAlign: 'center',
           flex: 1,
           paddingRight: 12,
           fontWeight: '600',
-          color: color,
+          color: color ? color : Colors.primary2,
         }}>
         {title}
       </Text>
@@ -42,6 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
+    marginTop: 16,
   },
 });
 export default HeaderComponent;

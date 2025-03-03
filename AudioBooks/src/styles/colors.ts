@@ -44,4 +44,10 @@ export const Colors = {
   select2: '#b3c4ba',
   homebg: '#768c80',
   bgcolor: '#eaeae8',
+  gold: '#FFD700',
+  silver: '#C0C0C0',
+  brown: '#A52A2A',
+  platium: '#E5E4E2',
+  diamond: '#5DADE2',
+  emerald: '50C878',
 };

@@ -118,7 +118,7 @@ const LibraryScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff', padding: 18},
+  container: {flex: 1, backgroundColor: Colors.bgcolor, padding: 18},
   title: {
     fontSize: 20,
     fontFamily: Fonts.bold,
