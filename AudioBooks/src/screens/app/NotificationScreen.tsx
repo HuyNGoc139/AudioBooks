@@ -1,10 +1,7 @@
 import {Text, View} from 'react-native';
+import SearchScreen from './SearchScreen/SearchScreen';
 
 const NotificationScreen = () => {
-  return (
-    <View>
-      <Text>NotificationScreen</Text>
-    </View>
-  );
+  return <View style={{flex: 1}}></View>;
 };
 export default NotificationScreen;

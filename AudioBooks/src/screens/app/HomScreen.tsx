@@ -51,18 +51,21 @@ const HomeScreen = () => {
       image:
         'https://m.media-amazon.com/images/I/71g2ednj0JL._AC_UF1000,1000_QL80_.jpg',
       progress: 60, // % đọc
+      catelori: 'Kinh dị',
     },
     {
       id: '2',
       title: 'PSALMS',
       image: 'https://images.unsplash.com/photo-1526289032122-5440e6dbb27b',
       progress: 40,
+      catelori: 'Kinh dị',
     },
     {
       id: '3',
       title: 'Design Anthology',
       image: 'https://images.unsplash.com/photo-1532012197267-da84d127e765',
       progress: 80,
+      catelori: 'Khoa Học',
     },
     {
       id: '4',
@@ -70,6 +73,7 @@ const HomeScreen = () => {
       image:
         'https://www.nxbtre.com.vn/Images/Book/NXBTreStoryFull_02482010_104821.jpg',
       progress: 80,
+      catelori: 'Bí Ẩn',
     },
   ];
 
@@ -122,7 +126,9 @@ const HomeScreen = () => {
   ];
 
   const handleTopicPress = (topic: string) => {
-    setSelectedTopics(topic);
+    topic === selectedTopics
+      ? setSelectedTopics(null)
+      : setSelectedTopics(topic);
   };
 
   const onNavToAuthor = () => {
@@ -132,6 +138,14 @@ const HomeScreen = () => {
   const onNavToBookDetails = () => {
     navigation.navigate('BookDetails');
   };
+
+  const onNavToSearchScreen = () => {
+    navigation.navigate('Search');
+  };
+
+  const filteredBooks = selectedTopics
+    ? books.filter(book => book.catelori === selectedTopics)
+    : books;
 
   return (
     <ScrollView style={styles.container} nestedScrollEnabled={true}>
@@ -146,7 +160,7 @@ const HomeScreen = () => {
           </Text>
         </View>
         <View style={[styles.quoteBox2]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onNavToSearchScreen}>
             <Ionicons name="search" size={24} color={'#858c88'} />
           </TouchableOpacity>
         </View>
@@ -164,7 +178,7 @@ const HomeScreen = () => {
           selectedTopics={selectedTopics}
           topics={topics}
         />
-        <BookList books={books} isSave isShowTitle />
+        <BookList books={filteredBooks} isSave isShowTitle />
         <SectionHeader title="Sách hay trong tuần" onPress={() => {}} />
 
         <BookCard book={bookData} onPress={onNavToBookDetails} />

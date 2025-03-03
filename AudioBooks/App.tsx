@@ -9,6 +9,11 @@ import RNBootSplash from 'react-native-bootsplash';
 import {createNotifications} from 'react-native-notificated';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import RootNavigator from '@src/navigators';
+import {
+  BottomSheetModal,
+  BottomSheetView,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
 const {NotificationsProvider, useNotifications, ...events} =
   createNotifications();
 
@@ -21,11 +26,13 @@ const App: React.FC = () => {
     <PaperProvider>
       <Provider store={store}>
         <GestureHandlerRootView style={{flex: 1}}>
-          <NotificationsProvider>
-            <SafeAreaView style={{flex: 1}}>
-              <RootNavigator />
-            </SafeAreaView>
-          </NotificationsProvider>
+          <BottomSheetModalProvider>
+            <NotificationsProvider>
+              <SafeAreaView style={{flex: 1}}>
+                <RootNavigator />
+              </SafeAreaView>
+            </NotificationsProvider>
+          </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </Provider>
     </PaperProvider>

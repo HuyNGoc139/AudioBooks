@@ -28,7 +28,7 @@ const BookList = (props: Props) => {
   const BookItem = ({item}: {item: any}) => {
     const [saveBook, setSaveBook] = useState<boolean>(true);
     return (
-      <TouchableOpacity style={{marginHorizontal: 10}}>
+      <TouchableOpacity onPress={() => {}} style={{marginHorizontal: 10}}>
         <View
           style={[
             styles.bookContainer,
@@ -69,7 +69,7 @@ const BookList = (props: Props) => {
           )}
         </View>
         {isShowTitle ? (
-          <View style={[styles.center, {marginBottom: isColumn ? 20 : 0}]}>
+          <View style={[styles.center, {marginBottom: isColumn ? 0 : 0}]}>
             <Text style={[styles.title, {width: isColumn ? 100 : 120}]}>
               {item.title}
             </Text>
@@ -82,27 +82,37 @@ const BookList = (props: Props) => {
   };
 
   return (
-    <FlatList
-      data={books}
-      key={isColumn ? 'column' : 'row'}
-      numColumns={isColumn ? 3 : 1} // Nếu isColumn = true, hiển thị 2 cột
-      horizontal={!isColumn}
-      showsHorizontalScrollIndicator={false}
-      scrollEnabled={isColumn}
-      keyExtractor={item => item.id}
-      renderItem={({item}) => <BookItem item={item} />}
-      contentContainerStyle={[
-        styles.listContainer,
+    <View
+      style={[
+        styles.container,
         {
-          justifyContent: 'space-between',
+          justifyContent: books.length >= 3 ? 'center' : 'flex-start',
+          alignItems: books.length >= 3 ? 'center' : 'flex-start',
         },
-      ]}
-      nestedScrollEnabled={true}
-    />
+      ]}>
+      <FlatList
+        data={books}
+        key={isColumn ? 'column' : 'row'}
+        numColumns={isColumn ? 3 : 1} // Nếu isColumn = true, hiển thị 2 cột
+        horizontal={!isColumn}
+        showsHorizontalScrollIndicator={false}
+        scrollEnabled={isColumn}
+        keyExtractor={item => item.id}
+        renderItem={({item}) => <BookItem item={item} />}
+        contentContainerStyle={[
+          styles.listContainer,
+          {
+            justifyContent: 'space-between',
+          },
+        ]}
+        nestedScrollEnabled={true}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {flex: 1},
   listContainer: {
     paddingHorizontal: 10,
   },

@@ -7,13 +7,14 @@ interface Props {
   title: string;
   color?: string;
   noBack?: boolean;
+  padding?: boolean;
 }
 
 const HeaderComponent = (props: Props) => {
-  const {title, color, noBack} = props;
+  const {title, color, noBack, padding} = props;
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {paddingHorizontal: padding ? 18 : 0}]}>
       {!noBack ? (
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <ArrowLeft2 size="24" color="black" />

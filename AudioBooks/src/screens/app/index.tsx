@@ -20,6 +20,7 @@ import {
 import {Colors} from '@src/styles';
 import AuthorScreen from './AuthorScreen/AuthorScreen';
 import BookDetailsScreen from './BookDetails/BookDetailsScreen';
+import SearchScreen from './SearchScreen/SearchScreen';
 
 const AppStack = createNativeStackNavigator<TAppStackParamList>();
 const Tab = createBottomTabNavigator<TBottomTabParamList>();
@@ -131,6 +132,7 @@ const AppNavigator = () => {
       <AppStack.Screen name="HomeTab" component={HomeTab} />
       <AppStack.Screen name="Author" component={AuthorScreen} />
       <AppStack.Screen name="BookDetails" component={BookDetailsScreen} />
+      <AppStack.Screen name="Search" component={SearchScreen} />
     </AppStack.Navigator>
   );
 };

@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 18,
-    marginBottom: 16,
+    marginBottom: 0,
   },
   rightIcons: {
     flexDirection: 'row',

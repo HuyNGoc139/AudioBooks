@@ -43,4 +43,5 @@ export const Colors = {
   select: '#F5EFE1',
   select2: '#b3c4ba',
   homebg: '#768c80',
+  bgcolor: '#eaeae8',
 };
