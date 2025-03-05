@@ -7,15 +7,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 interface BookCardProps {
-  title: string;
-  author: string;
-  price?: string;
-  imageUrl: string;
-  rating: number;
-  reviews: string;
+  book?: any;
+  onPressReview?: () => void;
+  onPressReadBook?: () => void;
+  onPressAudioBook?: () => void;
 }
 
-const BookCard: React.FC<{book: BookCardProps}> = ({book}) => {
+const BookCard = (props: BookCardProps) => {
+  const {book, onPressAudioBook, onPressReadBook, onPressReview} = props;
   return (
     <View style={styles.card}>
       <Image source={{uri: book.imageUrl}} style={styles.bookImage} />
@@ -38,15 +37,17 @@ const BookCard: React.FC<{book: BookCardProps}> = ({book}) => {
             startingValue={book.rating}
             fractions={1}
           />
-          <Text style={styles.reviews}>({book.reviews})</Text>
+          <TouchableOpacity onPress={onPressReview}>
+            <Text style={styles.reviews}>({book.reviews})</Text>
+          </TouchableOpacity>
         </View>
 
         <View>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity onPress={onPressReadBook} style={styles.button}>
             <FontAwesome name="book" size={16} color="white" />
             <Text style={styles.buttonText}> Đọc sách</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity onPress={onPressAudioBook} style={styles.button}>
             <AntDesign name="play" size={16} color="white" />
             <Text style={styles.buttonText}> Nghe sách</Text>
           </TouchableOpacity>

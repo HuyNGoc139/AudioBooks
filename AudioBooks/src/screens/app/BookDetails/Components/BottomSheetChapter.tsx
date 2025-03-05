@@ -7,12 +7,10 @@ export type Ref = BottomSheetModal;
 interface Props {
   title?: string;
   filterArray: any[];
-  onSelectGenre?: (item: any) => void;
   ref: ForwardedRef<BottomSheetModal<any>> | undefined;
-  selected?: any;
 }
-const CustomBottomSheetModal = forwardRef<BottomSheetModal, Props>(
-  ({title, filterArray, onSelectGenre, selected}, ref) => {
+const BottomSheetChapter = forwardRef<BottomSheetModal, Props>(
+  ({title, filterArray}, ref) => {
     const snapPoints = useMemo(() => ['50%', '70%'], []);
 
     return (
@@ -22,24 +20,15 @@ const CustomBottomSheetModal = forwardRef<BottomSheetModal, Props>(
           {filterArray.map((genre: any, index: any) => (
             <TouchableOpacity
               key={index}
-              style={[
-                styles.genreItem,
-                {backgroundColor: selected === genre ? Colors.primary : ''},
-              ]}
-              onPress={() => onSelectGenre?.(genre)}>
-              <Text
-                style={[
-                  styles.genreText,
-                  {color: selected === genre ? Colors.white : Colors.black},
-                ]}>
-                {genre}
-              </Text>
+              style={[styles.genreItem]}
+              onPress={() => {}}>
+              <Text style={[styles.genreText]}>{genre.title}</Text>
             </TouchableOpacity>
           ))}
           <TouchableOpacity
-            style={styles.genreItem}
-            onPress={() => onSelectGenre?.('')}>
-            <Text style={styles.genreText}>Hủy</Text>
+            style={[styles.genreItem]}
+            onPress={() => ref?.current?.dismiss()}>
+            <Text style={[styles.genreText, {color: 'red'}]}>Hủy</Text>
           </TouchableOpacity>
         </BottomSheetView>
       </BottomSheetModal>
@@ -72,4 +61,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-export default CustomBottomSheetModal;
+export default BottomSheetChapter;
