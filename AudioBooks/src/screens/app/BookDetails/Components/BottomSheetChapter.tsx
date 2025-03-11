@@ -8,9 +8,10 @@ interface Props {
   title?: string;
   filterArray: any[];
   ref: ForwardedRef<BottomSheetModal<any>> | undefined;
+  onPress?: () => void;
 }
 const BottomSheetChapter = forwardRef<BottomSheetModal, Props>(
-  ({title, filterArray}, ref) => {
+  ({title, filterArray, onPress}, ref) => {
     const snapPoints = useMemo(() => ['50%', '70%'], []);
 
     return (
@@ -21,7 +22,7 @@ const BottomSheetChapter = forwardRef<BottomSheetModal, Props>(
             <TouchableOpacity
               key={index}
               style={[styles.genreItem]}
-              onPress={() => {}}>
+              onPress={onPress}>
               <Text style={[styles.genreText]}>{genre.title}</Text>
             </TouchableOpacity>
           ))}

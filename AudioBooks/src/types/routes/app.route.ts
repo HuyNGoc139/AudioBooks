@@ -4,6 +4,7 @@ export type TAppStackParamList = {
   Author: undefined;
   BookDetails: undefined;
   Search: undefined;
+  Chapter: undefined;
 };
 export type TBottomTabParamList = {
   Home: undefined;

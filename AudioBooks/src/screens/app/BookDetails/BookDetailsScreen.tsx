@@ -26,9 +26,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {Rating} from 'react-native-ratings';
 import BottomSheetChapter from './Components/BottomSheetChapter';
+import {TAppStackParamList} from '@src/types/routes/app.route';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 const BookDetailsScreen = () => {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<TAppStackParamList>>();
   const [saveBook, setSaveBook] = useState<boolean>(true);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const readBookRef = useRef<BottomSheetModal>(null);
@@ -475,6 +478,10 @@ const BookDetailsScreen = () => {
         filterArray={chapters}
         ref={readBookRef}
         title="Chương Sách Đọc"
+        onPress={() => {
+          navigation.navigate('Chapter');
+          readBookRef.current?.dismiss();
+        }}
       />
       <BottomSheetChapter
         filterArray={chapters}

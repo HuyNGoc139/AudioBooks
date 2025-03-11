@@ -50,4 +50,6 @@ export const Colors = {
   platium: '#E5E4E2',
   diamond: '#5DADE2',
   emerald: '50C878',
+  frenchLilacViolet: '#D7B0CD',
+  amourViolet: '#F9F2F9',
 };
